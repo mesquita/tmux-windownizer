@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+
+# Define directories to search for when no argument is provided
+directories=(~/Documents ~/Documents/projects)
+
+# Check if an argument was provided (expecting a directory path)
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    # Use 'find' and 'fzf' to interactively select a directory
+    selected=$(find "${directories[@]}" -mindepth 1 -maxdepth 1 -type d | fzf)
+fi
+
+# Exit if no directory was selected
+if [[ -z $selected ]]; then
+    echo "No directory selected."
+    exit 0
+fi
+
+# Format the selected directory name for the window name
+selected_name=$(basename "$selected" | tr . _)
+
+# Check if TMUX is not running, then start a new tmux session
+if [[ -z $TMUX ]]; then
+    tmux new-session -s "$selected_name" -c "$selected"
+    exit 0
+fi
+
+# Check if a window with the desired name already exists in the current session
+if ! tmux list-windows | grep -q "$selected_name"; then
+    # Create a new window in the current session with the selected directory
+    tmux new-window -n "$selected_name" -c "$selected"
+fi
+
+# Switch to the window with the name of the selected directory
+tmux select-window -t "$selected_name"
+
+
