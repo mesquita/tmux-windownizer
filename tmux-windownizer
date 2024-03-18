@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 # Define directories to search for when no argument is provided
 directories=(~/Documents ~/Documents/projects)
 
@@ -23,7 +22,7 @@ selected_name=$(basename "$selected" | tr . _)
 
 # Check if TMUX is not running, then start a new tmux session
 if [[ -z $TMUX ]]; then
-    tmux new-session -s "$selected_name" -c "$selected"
+    tmux new-session -s "$selected_name" -n "$selected_name" -c "$selected"
     exit 0
 fi
 
