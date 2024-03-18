@@ -6,3 +6,6 @@ Make sure fzf is installed.
 
 Change in the script the list of directories where to look for your projects.
 
+## Usage
+What I usually do is create an alias like this in my config:
+`alias tw='abc/.dotfiles/tmux-windownizer'`, use the `tw` to open the fuzzy finder and search for the folder I want.
